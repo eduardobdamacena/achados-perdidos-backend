@@ -15,4 +15,4 @@ class LogoutView(APIView):
             token.blacklist()
             return Response(status=status_http.HTTP_205_RESET_CONTENT, data={"mensagem": "Logout realizado com sucesso"})
         except Exception as e:
-            return Response(data=str(e), status=status_http.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": str(e)}, status=status_http.HTTP_400_BAD_REQUEST)
