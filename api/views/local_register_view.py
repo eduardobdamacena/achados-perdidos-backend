@@ -1,8 +1,6 @@
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status as status_http
-
 from api.permissions.is_post_or_authenticated_permission import IsPostOrAuthenticated
 from api.serializers.registrar_local_serializer import RegistrarLocalSerializer
 

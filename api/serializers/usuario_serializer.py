@@ -5,9 +5,6 @@ from api.models import User
 
 
 class UsuarioSerializer(ModelSerializer):
-    nome = CharField(min_length=3)
-    email = CharField(min_length=3)
-
     password_confirmation = CharField(write_only=True, required=True)
     password = CharField(write_only=True, required=True)
 

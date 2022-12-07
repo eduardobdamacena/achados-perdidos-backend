@@ -20,4 +20,4 @@ class ImagemLocalView(APIView):
         local = user.local
         local.imagem_local = imagem_local
         local.save()
-        return Response(data={"message":"Imagem atualizada com sucesso"}, status=status_http.HTTP_200_OK)
+        return Response(data={"message": "Imagem atualizada com sucesso"}, status=status_http.HTTP_200_OK)
