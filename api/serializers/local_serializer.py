@@ -7,7 +7,7 @@ from api.models import Local, User
 from api.serializers.usuario_serializer import UsuarioSerializer
 
 
-class RegistrarLocalSerializer(ModelSerializer):
+class LocalSerializer(ModelSerializer):
     nome = CharField(min_length=3)
     endereco = CharField(min_length=3)
     contato = CharField(min_length=3)
