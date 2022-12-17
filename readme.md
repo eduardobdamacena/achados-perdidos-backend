@@ -27,3 +27,6 @@ DATABASES = {
 
 #### Iniciar o servidor
 `python manage.py runserver`
+
+### Documentação da API
+A documentação da API está presente no arquivo: `achados-perdidos-api-docs.yaml`
