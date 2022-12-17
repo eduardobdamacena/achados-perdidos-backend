@@ -1,0 +1,355 @@
+openapi: 3.0.3
+info:
+  title: Achados e Perdidos
+  description: API back-end da aplicação Achados e Perdidos
+  version: 0.1.0
+  contact:
+    name: Eduardo Busato Damacena
+    email : eduardobusato51@gmail.com
+servers :
+  - url: http://localhost:8000
+    description: Aplicação Python Local
+tags :
+  - name: Api
+  - name: Auth
+  - name: Local
+paths:
+   /api:
+     get:
+       operationId: getLinks
+       tags:
+         - Api
+       description: Exibe os links iniciais da aplicação
+       responses:
+         '200' :
+            description: Exibição foi realizada com sucesso
+            content:
+              'application/json':
+                schema:
+                  type: object
+                  properties:
+                    links:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/LinkResponse'
+   /api/auth/login:
+     post:
+       operationId: login
+       tags:
+         - Auth
+       description: Realiza login de um administrador
+       requestBody:
+         content:
+           'application/json':
+             schema:
+               $ref: "#/components/schemas/CredentialsRequest"
+       responses:
+         '200':
+           description: "Autenticação realizada com sucesso"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/TokenResponse"
+         '400':
+           description: Houveram erros de validação
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ValidationErrorResponse"
+         '401':
+           description: Credenciais incorretas
+           content:
+             'application/json':
+               schema:
+                   $ref: "#/components/schemas/ErrorResponse"
+   /api/auth/refresh:
+     post:
+       operationId: refreshToken
+       description: Atualizar token de acesso
+       tags:
+         - Auth
+       requestBody:
+         content:
+           'application/json':
+             schema:
+               $ref: "#/components/schemas/RefreshRequest"
+       responses:
+         '200':
+           description: "Refresh token obtido com sucesso"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/TokenResponse"
+         '400':
+           description: "Houveram erros de validação"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ValidationErrorResponse"
+         '401':
+           description: "Refresh token inválido"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ErrorResponse"
+   /api/auth/logout:
+     post:
+       operationId: logout
+       description: Deslogar usuário da aplicação
+       tags:
+         - Auth
+       requestBody:
+         content:
+           'application/json':
+             schema:
+               $ref: "#/components/schemas/RefreshRequest"
+       responses:
+         '205':
+            description: Logout realizado com sucesso
+         '400':
+           description: Houveram erros de validação
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ValidationErrorResponse"
+         '401':
+           description: "Token inválido"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ErrorResponse"
+       security:
+         - JWT: []
+   /api/locais:
+     post:
+       operationId: postLocais
+       description: Cadastra um novo local e administrador
+       tags:
+         - Local
+       requestBody:
+         content:
+           'application/json':
+             schema:
+               $ref: "#/components/schemas/CreateLocalRequest"
+       responses:
+         '201':
+           description: Local criado com sucesso
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/LocalResponse"
+         '400':
+           description: "Houveram erros de validação"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ValidationErrorResponse"
+     get:
+       operationId: getLocal
+       description: Exibe os dados do usuário logado
+       tags:
+         - Local
+       responses:
+         '200':
+           description: Local obtido com sucesso
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/LocalResponse"
+
+         '401':
+           description: "Token inválido"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ErrorResponse"
+       security:
+         - JWT: []
+   /api/locais/imagem:
+     post:
+       operationId: postImagem
+       description: Definir imagem para o local
+       tags:
+         - Local
+       requestBody:
+         content:
+           'multipart/form-data':
+             schema:
+               $ref: "#/components/schemas/ImagemLocalRequest"
+       responses:
+         '200':
+           description: Imagem do Local definida
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/MessageResponse"
+         '400':
+           description: "Houveram erros de validação"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ValidationErrorResponse"
+         '401':
+           description: "Refresh token inválido"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ErrorResponse"
+       security:
+         - JWT: []
+components :
+  schemas :
+    LinkResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - GET
+            - POST
+            - PUT
+            - PATCH
+            - DELETE
+        rel:
+          type: string
+        uri:
+          type: string
+          format: uri
+    CredentialsRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 3
+          maxLength: 255
+        password:
+          type: string
+          format: password
+    TokenResponse:
+      type: object
+      properties:
+        access:
+          type: string
+        refresh:
+          type: string
+    ValidationErrorResponse:
+      type: object
+      additionalProperties:
+            type: array
+            items:
+              type: string
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        detail:
+          type: string
+    RefreshRequest:
+      type: object
+      required:
+        - refresh
+      properties:
+          refresh:
+            type: string
+    CreateLocalRequest:
+      type: object
+      required:
+        - nome
+        - endereco
+        - contato
+        - usuario
+      properties:
+        nome:
+          type: string
+          minLength: 3
+          maxLength: 255
+        endereco:
+          type: string
+          minLength: 3
+          maxLength: 255
+        contato:
+          type: string
+          minLength: 3
+          maxLength: 255
+        descricao:
+          type: string
+          maxLength: 255
+        usuario:
+            $ref: "#/components/schemas/UsuarioRequest"
+    LocalResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        endereco:
+          type: string
+        contato:
+          type: string
+        descricao:
+          type: string
+        imagem:
+          type: string
+          format: uri
+        usuario:
+          $ref: "#/components/schemas/UsuarioResponse"
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkResponse'
+    MessageResponse:
+      type: object
+      properties:
+        mensagem:
+          type: string
+    ImagemLocalRequest:
+      type: object
+      required:
+        - imagem_local
+      properties:
+        imagem_local:
+          type: string
+          format: binary
+    UsuarioRequest:
+          type: object
+          required:
+            - nome
+            - email
+            - password
+            - password_confirmation
+          properties:
+            nome:
+              type: string
+              minLength: 3
+              maxLength: 255
+            email:
+              type: string
+              format: email
+              minLength: 3
+              maxLength: 255
+            password:
+              type: string
+              format: password
+            password_confirmation:
+              type: string
+              format: password
+    UsuarioResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        email:
+          type: string
+          format: email
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
