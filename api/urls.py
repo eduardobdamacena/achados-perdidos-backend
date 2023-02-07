@@ -12,5 +12,5 @@ urlpatterns = [
     path("locais/imagem", ImagemLocalView.as_view(), name="imagem-local-list"),
     path("objetos", ObjetoView.as_view(), name="objeto-list"),
     path("objetos/<int:objeto_id>", ObjetoIDView.as_view(), name="objeto-detail"),
-    path("objetos/<int:objeto_id>/imagem", ImagemObjetoView.as_view(), name="imagem-objeto-list"),
+    path("objetos/<int:objeto_id>/imagem", ImagemObjetoView.as_view(), name="imagem-objeto-detail"),
 ]
