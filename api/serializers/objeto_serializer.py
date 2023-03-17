@@ -20,9 +20,10 @@ class ObjetoSerializer(ModelSerializer):
         return instance.created_at.strftime("%Y-%m-%d")
 
     def get_imagem(self, instance):
+        request = self.context['request']
         if instance.imagem_objeto:
             imagem_url = instance.imagem_objeto.url
-            return imagem_url
+            return request.build_absolute_uri(imagem_url)
         return None
 
     def create(self, validated_data):

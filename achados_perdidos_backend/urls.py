@@ -13,10 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from achados_perdidos_backend import settings
 from api.views.logout_view import LogoutView
 
 urlpatterns = [
@@ -26,3 +28,6 @@ urlpatterns = [
     path('api/auth/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/logout', LogoutView.as_view(), name='token_logout'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
