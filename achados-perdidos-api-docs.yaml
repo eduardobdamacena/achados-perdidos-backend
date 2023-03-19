@@ -13,6 +13,7 @@ tags :
   - name: Api
   - name: Auth
   - name: Local
+  - name: Objeto
 paths:
    /api:
      get:
@@ -167,7 +168,7 @@ paths:
          - JWT: []
    /api/locais/imagem:
      post:
-       operationId: postImagem
+       operationId: postImagemLocal
        description: Definir imagem para o local
        tags:
          - Local
@@ -197,6 +198,214 @@ paths:
                  $ref: "#/components/schemas/ErrorResponse"
        security:
          - JWT: []
+   /api/objetos:
+    get:
+      operationId: getObjetos
+      description: Lista os objetos cadastrados para o local do usuário logado
+      tags:
+        - Objeto
+      responses:
+        '200':
+          description: Objetos obtidos com sucesso
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ObjetosResponse"
+        '401':
+          description: "Token inválido"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - JWT: []
+    post:
+      operationId: registrarObjeto
+      description: Cadastrar um objeto no local do usuário logado
+      tags:
+        - Objeto
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/ObjetoRequest"
+      responses:
+        '201':
+          description: Objeto cadastrado
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ObjetosResponse"
+        '400':
+           description: Houveram erros de validação
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ValidationErrorResponse"
+        '401':
+          description: "Token inválido"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - JWT: []
+   /api/objetos/{objetoId}/imagem:
+    post:
+      operationId: postImageObjeto
+      description: Definir imagem do objeto
+      tags:
+        - Objeto
+      parameters:
+        - name: objetoId
+          in: path
+          description: ID do objeto que receberá a imagem
+          required: true
+          schema:
+            type: integer
+          example: 1
+      requestBody:
+        content:
+          'multipart/form-data':
+            schema:
+               $ref: "#/components/schemas/ImagemObjetoRequest"
+      responses:
+        '200':
+          description: "Imagem definida"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        '400':
+          description: "Houveram erros de validação"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        '401':
+          description: "Token inválido"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - JWT: []
+   /api/objetos/{objetoId}:
+    get:
+      operationId: getObjeto
+      description:  Exibir os dados de um objeto
+      tags:
+        - Objeto
+      parameters:
+        - name: objetoId
+          in: path
+          description: ID do objeto que será obtido
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: "Objeto obtido"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ObjetosResponse"
+        '401':
+          description: "Token inválido"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '404':
+          description: "Objeto não encontrado"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+      security:
+        - JWT: []
+    put:
+      operationId: putObjeto
+      description: Alterar dados de um objeto
+      tags:
+        - Objeto
+      parameters:
+        - name: objetoId
+          in: path
+          description: "ID do objeto que será alterado"
+          required: true
+          schema:
+            type: integer
+          example: 1
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/ObjetoRequest"
+      responses:
+        '200':
+          description: "Objeto atualizado"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ObjetosResponse"
+        '400':
+          description: "Houveram erros de validação"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        '401':
+          description: "Token inválido"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '404':
+          description: "Objeto não encontrado"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+      security:
+        - JWT: []
+    delete:
+      operationId: deleteObjeto
+      description: "Remover objeto"
+      tags:
+        - Objeto
+      parameters:
+        - name: objetoId
+          in: path
+          description: "ID do objeto para remover"
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '204':
+          description: "Objeto removido"
+          content:
+              "application/json":
+                schema:
+                  $ref: "#/components/schemas/MessageResponse"
+        '401':
+          description: "Token inválido"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '404':
+          description: "Objeto não encontrado"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+      security:
+        - JWT: []
 components :
   schemas :
     LinkResponse:
@@ -349,6 +558,43 @@ components :
         email:
           type: string
           format: email
+    ObjetoRequest:
+      type: object
+      required:
+        - nome
+        - descricao
+      properties:
+        nome:
+          type: string
+        descricao:
+          type: string
+    ObjetosResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        descricao:
+          type: string
+        entregue:
+          type: boolean
+        data_cadastro:
+          type: string
+        imagem:
+          type: string
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkResponse'
+    ImagemObjetoRequest:
+      type: object
+      required:
+        - imagem_objeto
+      properties:
+        imagem_objeto:
+          type: string
+          format: binary
   securitySchemes:
     JWT:
       type: http
