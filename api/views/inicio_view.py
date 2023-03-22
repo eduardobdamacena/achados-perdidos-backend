@@ -12,5 +12,6 @@ class InicioView(APIView):
         links.add_post("register", reverse("local-list"))
         links.add_post("logout", reverse("token_logout"))
         links.add_post("refresh_token", reverse("token_refresh"))
+        links.add_get("busca_local", reverse("search-local"))
 
         return Response(data={"links": links.to_array()}, status=status_http.HTTP_200_OK)

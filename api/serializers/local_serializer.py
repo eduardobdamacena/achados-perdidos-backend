@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse
-from rest_framework.fields import CharField, SerializerMethodField, ImageField
+from rest_framework.fields import CharField, SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 from api.hateoas import Hateoas
 from api.models import Local, User
