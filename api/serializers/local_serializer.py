@@ -30,10 +30,11 @@ class LocalSerializer(ModelSerializer):
 
         return local_criado
 
-    def get_imagem(self, local):
-        if local.imagem_local:
-            imagem_url = local.imagem_local.url
-            return imagem_url
+    def get_imagem(self, instance):
+        request = self.context['request']
+        if instance.imagem_local:
+            imagem_url = instance.imagem_local.url
+            return request.build_absolute_uri(imagem_url)
         return None
 
     def get_links(self, local):

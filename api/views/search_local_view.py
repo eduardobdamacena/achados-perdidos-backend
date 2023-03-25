@@ -13,5 +13,5 @@ class SearchLocalView(APIView):
             return Response(data={"message": "Digite um nome para buscar o local"},
                             status=status_http.HTTP_400_BAD_REQUEST)
         list_local = local_service.search_by_name(local_name)
-        local_search_result_serializer = LocalSearchResultSerializer(list_local, many=True)
+        local_search_result_serializer = LocalSearchResultSerializer(list_local, many=True, context={"request": request})
         return Response(data=local_search_result_serializer.data, status=status_http.HTTP_200_OK)
