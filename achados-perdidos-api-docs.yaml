@@ -198,6 +198,58 @@ paths:
                  $ref: "#/components/schemas/ErrorResponse"
        security:
          - JWT: []
+   /api/locais/busca:
+    get:
+      operationId: buscaLocais
+      description: Busca locais cadastrados por nome
+      tags:
+        - Local
+      parameters:
+        - name: nome
+          in: query
+          description: Termo de busca do local
+          required: true
+          schema:
+            type: string
+          example: "empresa x"
+      responses:
+        '200':
+          description: Busca realizada com sucesso
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ShortLocalResponse"
+        '400':
+           description: "Houveram erros de validação"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ValidationErrorResponse"
+   /api/locais/{localId}/objetos:
+    get:
+      operationId: listaObjetosLocal
+      description: Lista os objetos cadastrados de um local
+      tags:
+        - Local
+      parameters:
+        - name: localId
+          in: path
+          description: ID do local
+          required: true
+          schema:
+            type: string
+          example: 1
+      responses:
+        '200':
+          description: Objetos obtidos com sucesso
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ShortObjetosResponse"
    /api/objetos:
     get:
       operationId: getObjetos
@@ -490,6 +542,26 @@ components :
           maxLength: 255
         usuario:
             $ref: "#/components/schemas/UsuarioRequest"
+    ShortLocalResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        endereco:
+          type: string
+        contato:
+          type: string
+        descricao:
+          type: string
+        imagem:
+          type: string
+          format: uri
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkResponse'
     LocalResponse:
       type: object
       properties:
@@ -567,6 +639,21 @@ components :
         nome:
           type: string
         descricao:
+          type: string
+    ShortObjetosResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        descricao:
+          type: string
+        entregue:
+          type: boolean
+        data_cadastro:
+          type: string
+        imagem:
           type: string
     ObjetosResponse:
       type: object
