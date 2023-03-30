@@ -12,8 +12,8 @@ def listar_objeto_usuario(usuario_id):
     return Objeto.objects.filter(local_id=local.id).all()
 
 
-def listar_objetos_local(local_id):
-    return Objeto.objects.filter(local_id=local_id).all()
+def listar_objetos_local_nao_entregue(local_id):
+    return Objeto.objects.filter(local_id=local_id, entregue=False).all()
 
 
 def apagar_objeto(objeto_id):

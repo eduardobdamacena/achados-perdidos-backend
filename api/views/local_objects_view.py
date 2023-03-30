@@ -8,6 +8,6 @@ from api.services import objeto_service
 class LocalObjectsView(APIView):
 
     def get(self, request, local_id, format=None):
-        objects = objeto_service.listar_objetos_local(local_id)
+        objects = objeto_service.listar_objetos_local_nao_entregue(local_id)
         local_object_serializer = LocalObjectsSerializer(objects, many=True, context={"request": request})
         return Response(data=local_object_serializer.data, status=status_http.HTTP_200_OK)
