@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Achados e Perdidos
   description: API back-end da aplicação Achados e Perdidos
-  version: 0.1.0
+  version: 0.3.0
   contact:
     name: Eduardo Busato Damacena
     email : eduardobusato51@gmail.com
