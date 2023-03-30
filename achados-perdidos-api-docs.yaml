@@ -250,6 +250,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ShortObjetosResponse"
+        '404':
+          description: "Objeto não encontrado"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
    /api/objetos:
     get:
       operationId: getObjetos
