@@ -1,5 +1,6 @@
 from django.urls import path
 
+from api.views.dono_objeto_view import DonoObjetoView
 from api.views.imagem_local_view import ImagemLocalView
 from api.views.imagem_objeto_view import ImagemObjetoView
 from api.views.inicio_view import InicioView
@@ -17,4 +18,5 @@ urlpatterns = [
     path("objetos", ObjetoView.as_view(), name="objeto-list"),
     path("objetos/<int:objeto_id>", ObjetoIDView.as_view(), name="objeto-detail"),
     path("objetos/<int:objeto_id>/imagem", ImagemObjetoView.as_view(), name="imagem-objeto-detail"),
+    path("objetos/<int:objeto_id>/donos", DonoObjetoView.as_view(), name="definir-dono-objeto"),
 ]

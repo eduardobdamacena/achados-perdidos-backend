@@ -2,6 +2,7 @@ import os
 import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from localflavor.br.models import BRCPFField
 
 
 class User(AbstractUser):
@@ -43,6 +44,6 @@ class Objeto(models.Model):
     imagem_objeto = models.ImageField(null=True, blank=True, upload_to=path_imagem)
     local = models.ForeignKey(Local, on_delete=models.CASCADE, null=False, blank=False, related_name="objetos")
     dono_nome = models.CharField(max_length=255, null=True, blank=True,)
-    dono_cpf = models.CharField(max_length=255, null=True, blank=True,)
+    dono_cpf = BRCPFField(null=True, blank=True,)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
