@@ -30,6 +30,15 @@ class LocalSerializer(ModelSerializer):
 
         return local_criado
 
+    def update(self, instance, validated_data):
+        usuario_data = validated_data.pop('usuario')
+        usuario_data['password'] = make_password(usuario_data['password'])
+        usuario_data.pop('password_confirmation', None)
+        usuario_serializer = UsuarioSerializer()
+        super(self.__class__, self).update(instance, validated_data)
+        super(UsuarioSerializer, usuario_serializer).update(instance.usuario, usuario_data)
+        return instance
+
     def get_imagem(self, instance):
         request = self.context['request']
         if instance.imagem_local:
