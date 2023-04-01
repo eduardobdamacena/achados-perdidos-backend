@@ -37,4 +37,5 @@ class ObjetoSerializer(ModelSerializer):
         links.add_put("atualizar_objeto", reverse("objeto-detail", kwargs={'objeto_id': instance.id}))
         links.add_delete("apagar_objeto", reverse("objeto-detail", kwargs={'objeto_id': instance.id}))
         links.add_post("definir_imagem_objeto", reverse("imagem-objeto-detail", kwargs={'objeto_id': instance.id}))
+        links.add_post("definir_dono_objeto", reverse("definir-dono-objeto", kwargs={'objeto_id': instance.id}))
         return links.to_array()
