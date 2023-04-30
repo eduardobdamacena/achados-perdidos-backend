@@ -4,14 +4,14 @@ from rest_framework.serializers import ModelSerializer
 from api.models import User
 
 
-class UsuarioSerializer(ModelSerializer):
+class EditarUsuarioSerializer(ModelSerializer):
     email = EmailField()
-    password_confirmation = CharField(write_only=True, required=True)
-    password = CharField(write_only=True, required=True)
+    password_confirmation = CharField(write_only=True, required=False)
+    password = CharField(write_only=True, required=False)
 
     class Meta:
         model = User
-        fields = ("id", "nome", "email", 'password', 'password_confirmation')
+        fields = ("nome", "email", 'password', 'password_confirmation')
 
     def validate_password(self, password):
         password_confirmation = None
@@ -26,7 +26,8 @@ class UsuarioSerializer(ModelSerializer):
         return password
 
     def validate_email(self, value):
-        if self.context['request'].method == 'POST':
-            if self.Meta.model.objects.filter(email=value).exists():
+        if self.context['request'].method == 'PUT':
+            user = self.Meta.model.objects.filter(email=value).first()
+            if user and user.id != self.context['request'].user.id:
                 raise ValidationError('usuário com este email já existe.')
         return value

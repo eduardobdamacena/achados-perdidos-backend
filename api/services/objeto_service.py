@@ -9,7 +9,7 @@ def listar_objeto_id(objeto_id):
 
 def listar_objeto_usuario(usuario_id):
     local = listar_local_usuario(usuario_id)
-    return Objeto.objects.filter(local_id=local.id).all()
+    return Objeto.objects.filter(local_id=local.id, entregue=False).all()
 
 
 def listar_objetos_local_nao_entregue(local_id):
