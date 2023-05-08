@@ -166,6 +166,54 @@ paths:
                  $ref: "#/components/schemas/ErrorResponse"
        security:
          - JWT: []
+     put:
+       operationId: updateLocais
+       description: Atualiza dados do local e administrador
+       tags:
+         - Local
+       requestBody:
+         content:
+           'application/json':
+             schema:
+               $ref: "#/components/schemas/CreateLocalRequest"
+
+       responses:
+         '200':
+           description: Local obtido com sucesso
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/LocalResponse"
+         '400':
+           description: "Houveram erros de validação"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ValidationErrorResponse"
+         '401':
+           description: "Token inválido"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ErrorResponse"
+       security:
+         - JWT: []
+     delete:
+       operationId: deleteLocais
+       description: Apagar dados do local e administrador
+       tags:
+         - Local
+       responses:
+         '204':
+           description: Local removido com sucesso
+         '401':
+           description: "Token inválido"
+           content:
+             'application/json':
+               schema:
+                 $ref: "#/components/schemas/ErrorResponse"
+       security:
+         - JWT: []
    /api/locais/imagem:
      post:
        operationId: postImagemLocal
@@ -464,6 +512,46 @@ paths:
                 $ref: "#/components/schemas/MessageResponse"
       security:
         - JWT: []
+   /api/objetos/{objetoId}/donos:
+    post:
+      operationId: postDono
+      description:  Informar o dono de um objeto
+      tags:
+        - Objeto
+      parameters:
+        - name: objetoId
+          in: path
+          description: ID do objeto que será obtido
+          required: true
+          schema:
+            type: integer
+          example: 1
+      requestBody:
+        content:
+          'application/json':
+            schema:
+               $ref: "#/components/schemas/DonoRequest"
+      responses:
+        '200':
+          description: "Dono Informado"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        '400':
+          description: "Houveram erros de validação"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        '401':
+          description: "Token inválido"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - JWT: []
 components :
   schemas :
     LinkResponse:
@@ -688,6 +776,20 @@ components :
         imagem_objeto:
           type: string
           format: binary
+    DonoRequest:
+      type: object
+      required:
+        - dono_nome
+        - dono_cpf
+      properties:
+        dono_nome:
+          type: string
+          minLength: 3
+          maxLength: 255
+        dono_cpf:
+          type: string
+          minLength: 11
+          maxLength: 11
   securitySchemes:
     JWT:
       type: http
