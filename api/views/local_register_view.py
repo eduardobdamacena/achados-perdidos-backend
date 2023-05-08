@@ -4,6 +4,7 @@ from rest_framework import status as status_http
 from api.permissions.is_post_or_authenticated_permission import IsPostOrAuthenticated
 from api.serializers.editar_local_serializer import EditarLocalSerializer
 from api.serializers.local_serializer import LocalSerializer
+from api.services.usuario_service import apagar_usuario_id
 
 
 class LocalRegisterView(APIView):
@@ -30,3 +31,8 @@ class LocalRegisterView(APIView):
             local_serializer = LocalSerializer(local_atualizado, context={"request": request})
             return Response(data=local_serializer.data, status=status_http.HTTP_200_OK)
         return Response(editar_local_serializer.errors, status=status_http.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, format=None):
+        usuario_id = request.user.id
+        apagar_usuario_id(usuario_id)
+        return Response(status=status_http.HTTP_204_NO_CONTENT)

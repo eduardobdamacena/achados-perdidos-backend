@@ -41,6 +41,7 @@ class LocalSerializer(ModelSerializer):
         links = Hateoas()
         links.add_get("self", reverse("local-list"))
         links.add_put("atualizar_local", reverse("local-list"))
+        links.add_delete("apagar_local", reverse("local-list"))
         links.add_post("definir_imagem_local", reverse("imagem-local-list"))
         links.add_get("listar_objetos_local", reverse("objeto-list"))
         links.add_post("adicionar_objeto_local", reverse("objeto-list"))
